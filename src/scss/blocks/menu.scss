@@ -1,0 +1,39 @@
+.header {
+  position: relative;
+  overflow-x: clip;
+  &__top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-inline: 1rem;
+  }
+}
+
+.icon-menu {
+  position: absolute;
+  right: 1rem;
+  z-index: 1;
+  width: 40px;
+  height: 40px;
+  background-color: red;
+}
+
+.menu {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  top: 0;
+  right: 0;
+  width: 200px;
+  height: 100vh;
+  background-color: #fff;
+  padding: 1rem;
+  color: black;
+  line-height: 50px;
+  transition: translate 0.3s;
+
+  &--show {
+    translate: 0;
+  }
+}
