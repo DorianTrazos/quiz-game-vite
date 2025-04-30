@@ -1,0 +1,26 @@
+.game-options{
+
+}
+
+.range-container{
+    width: 150px;
+    margin-inline: auto;
+    display: flex;
+    justify-content: space-between;
+    accent-color: fuchsia;
+}
+
+.time-selection{
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    accent-color: fuchsia;
+}
+
+.themes-selection{
+    display: grid;
+    grid-template-columns: repeat(2,1fr);
+    gap: 1rem;
+
+    margin-bottom: 1rem;
+}

@@ -7,13 +7,31 @@ import {
   rangeLabelElement,
   startGameButton,
   themeMessageElement,
-  themesElement
+  themesElement,
+  timeElement,
+  timeSelectionElement,
 } from './dom';
 
 let gameAnswers = [];
 let currentQuestion = 0;
+let intervalId = null;
+const selectedTime = 10;
 
 let totalAnswers = rangeElement.value;
+
+const setTimer = () => {
+  let remainingTime = selectedTime;
+  timeElement.textContent = remainingTime;
+  clearInterval(intervalId);
+  intervalId = setInterval(() => {
+    remainingTime--;
+    timeElement.textContent = remainingTime;
+    if (remainingTime <= 0) {
+      clearInterval(intervalId);
+      timeElement.textContent = 'SE JODIÓ';
+    }
+  }, 1000);
+};
 
 const printQuestion = () => {
   questionElement.textContent = gameAnswers[currentQuestion].question;
@@ -24,6 +42,8 @@ const printQuestion = () => {
       answer.textContent = currentAnswer;
       answer.dataset.answer = currentAnswer;
     });
+
+  setTimer();
 };
 
 const changeRangeLabel = event => {
@@ -33,14 +53,18 @@ const changeRangeLabel = event => {
 
 const getGameAnswers = () => {
   gameAnswers = [];
-  const categorySelected = themesElement.querySelectorAll('.category-input:checked');
+  const categorySelected = themesElement.querySelectorAll(
+    '.category-input:checked'
+  );
   const allQuestionsFromCategories = [];
   categorySelected.forEach(input => {
     allQuestionsFromCategories.push(...QUESTIONS[input.value]);
   });
 
   while (gameAnswers.length < totalAnswers) {
-    const randomNumber = Math.floor(Math.random() * allQuestionsFromCategories.length);
+    const randomNumber = Math.floor(
+      Math.random() * allQuestionsFromCategories.length
+    );
 
     if (!gameAnswers.includes(allQuestionsFromCategories[randomNumber])) {
       gameAnswers.push(allQuestionsFromCategories[randomNumber]);
@@ -51,7 +75,9 @@ const getGameAnswers = () => {
 };
 
 const setStartButtonState = () => {
-  const categorySelected = [...themesElement.querySelectorAll('.category-input:checked')];
+  const categorySelected = [
+    ...themesElement.querySelectorAll('.category-input:checked'),
+  ];
   const areCategoriesSelected = categorySelected.some(input => input.checked);
   if (areCategoriesSelected) {
     themeMessageElement.textContent = '';
