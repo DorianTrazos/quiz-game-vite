@@ -2,8 +2,10 @@ html {
   scroll-behavior: smooth;
 }
 body {
-  color: aliceblue;
-  background-color: #111;
+  height: 100vh;
   font-family: sans-serif;
-  text-align: center;
+  background-image: linear-gradient(transparent 33%, var(--general) 33% 66%, transparent 66%),
+    radial-gradient(rgba(101, 101, 101, 0.217) 6.5px, transparent 6.5px);
+  background-size: 100%, 25px 25px;
+  background-color: var(--general);
 }

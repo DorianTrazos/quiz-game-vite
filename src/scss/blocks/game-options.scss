@@ -1,26 +1,131 @@
-.game-options{
-
+.game-options {
+  position: relative;
+  top: 70px;
+  width: 90%;
+  margin-inline: auto;
+  padding: 0.5rem;
+  text-align: center;
+  border-radius: 2rem;
+  background-color: #fff;
+  box-shadow: 10px 10px 5px rgba(0, 0, 0, 0.132);
 }
 
-.range-container{
-    width: 150px;
-    margin-inline: auto;
-    display: flex;
-    justify-content: space-between;
-    accent-color: fuchsia;
+.range-container {
+  accent-color: var(--general);
 }
 
-.time-selection{
-    display: flex;
-    justify-content: center;
-    gap: 1rem;
-    accent-color: fuchsia;
+.time-selection {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
 }
 
-.themes-selection{
-    display: grid;
-    grid-template-columns: repeat(2,1fr);
-    gap: 1rem;
+.radio-label {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #fff;
+  border-radius: 0.5rem;
+  width: 50px;
+  height: 30px;
+  background-color: grey;
+}
 
-    margin-bottom: 1rem;
+.radio-input {
+  display: none;
+}
+
+.radio-input:checked + .radio-label {
+  background-color: var(--general);
+}
+
+.themes-selection {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  justify-items: center;
+  gap: 1rem;
+  width: 90%;
+  margin-inline: auto;
+}
+
+.category-label {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #fff;
+  border-radius: 0.5rem;
+  min-width: 120px;
+  width: fit-content;
+  height: 35px;
+  background-color: rgba(0, 0, 0, 0.5);
+  padding: 0.5rem;
+}
+
+.category-input {
+  display: none;
+}
+
+.category-input:checked + .category-label {
+  background-color: var(--bg-color);
+}
+
+.start-button {
+  position: relative;
+  top: 100px;
+  left: 50%;
+  translate: -50%;
+  font-size: 1.5rem;
+  padding: 0.5rem 1rem;
+  border-radius: 1rem;
+  border: none;
+  box-shadow: 10px 10px 5px rgba(0, 0, 0, 0.132);
+}
+
+input[type='range'] {
+  -webkit-appearance: none; /* Para Chrome, Safari, etc. */
+  appearance: none; /* Para Firefox */
+  width: 75%; /* Opcional: ajustar el ancho */
+  background: transparent; /* Opcional: quitar el fondo predeterminado */
+  border-radius: 8px; /* Redondeo de esquinas */
+  cursor: pointer; /* Opcional: cursor en forma de mano */
+}
+
+input[type='range']::-webkit-slider-runnable-track {
+  /* Para Chrome, Safari, etc. */
+  width: 80%; /* Ajustar el ancho si es necesario */
+  height: 8px; /* Ajustar la altura */
+  background-color: rgba(90, 90, 90, 0.3); /* Color de fondo */
+  border-radius: 0.5rem;
+}
+
+input[type='range']::-moz-range-track {
+  /* Para Firefox */
+  width: 80%;
+  height: 8px;
+  background-color: rgba(90, 90, 90, 0.3);
+  border-radius: 0.5rem;
+}
+
+input[type='range']::-webkit-slider-thumb {
+  /* Para Chrome, Safari, etc. */
+  -webkit-appearance: none; /* Necesario para quitar el estilo predeterminado */
+  appearance: none; /* Para Firefox */
+  width: 20px; /* Tamaño de la thumb */
+  height: 20px; /* Tamaño de la thumb */
+  background: var(--general); /* Color de la thumb */
+  border: 0; /* Quitar el borde */
+  border-radius: 50%; /* Hacerla circular */
+  cursor: pointer; /* Cursor en forma de mano */
+  margin-top: -5px; /* Ajustar la posición vertical (opcional) */
+}
+
+input[type='range']::-moz-range-thumb {
+  /* Para Firefox */
+  width: 20px;
+  height: 20px;
+  background: var(--general);
+  border: 0;
+  border-radius: 50%;
+  cursor: pointer;
+  margin-top: -5px;
 }

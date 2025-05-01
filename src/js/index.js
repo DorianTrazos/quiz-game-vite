@@ -2,22 +2,31 @@ import { QUESTIONS } from '../constants/questions';
 import '../scss/styles.scss';
 import {
   answersElement,
+  gameContainerElement,
+  optionsContainerElement,
   questionElement,
   rangeElement,
   rangeLabelElement,
   startGameButton,
   themeMessageElement,
   themesElement,
-  timeElement,
-  timeSelectionElement,
+  timeElement
 } from './dom';
 
 let gameAnswers = [];
+let userAnswers = [];
 let currentQuestion = 0;
 let intervalId = null;
-const selectedTime = 10;
+const selectedTime = 60;
 
 let totalAnswers = rangeElement.value;
+
+const showGameContainer = () => {
+  optionsContainerElement.classList.add('hide');
+  startGameButton.classList.add('hide');
+  // homeCardElement.classList.add('hide');
+  gameContainerElement.classList.remove('hide');
+};
 
 const setTimer = () => {
   let remainingTime = selectedTime;
@@ -28,9 +37,11 @@ const setTimer = () => {
     timeElement.textContent = remainingTime;
     if (remainingTime <= 0) {
       clearInterval(intervalId);
-      timeElement.textContent = 'SE JODIÓ';
+      currentQuestion++;
+      printQuestion();
     }
   }, 1000);
+  showGameContainer();
 };
 
 const printQuestion = () => {
@@ -53,18 +64,14 @@ const changeRangeLabel = event => {
 
 const getGameAnswers = () => {
   gameAnswers = [];
-  const categorySelected = themesElement.querySelectorAll(
-    '.category-input:checked'
-  );
+  const categorySelected = themesElement.querySelectorAll('.category-input:checked');
   const allQuestionsFromCategories = [];
   categorySelected.forEach(input => {
     allQuestionsFromCategories.push(...QUESTIONS[input.value]);
   });
 
   while (gameAnswers.length < totalAnswers) {
-    const randomNumber = Math.floor(
-      Math.random() * allQuestionsFromCategories.length
-    );
+    const randomNumber = Math.floor(Math.random() * allQuestionsFromCategories.length);
 
     if (!gameAnswers.includes(allQuestionsFromCategories[randomNumber])) {
       gameAnswers.push(allQuestionsFromCategories[randomNumber]);
@@ -75,9 +82,7 @@ const getGameAnswers = () => {
 };
 
 const setStartButtonState = () => {
-  const categorySelected = [
-    ...themesElement.querySelectorAll('.category-input:checked'),
-  ];
+  const categorySelected = [...themesElement.querySelectorAll('.category-input:checked')];
   const areCategoriesSelected = categorySelected.some(input => input.checked);
   if (areCategoriesSelected) {
     themeMessageElement.textContent = '';
@@ -91,11 +96,14 @@ const checkCorrectAnswer = event => {
   const correctAnswer = gameAnswers[currentQuestion].answer;
   const userAnswer = event.target.dataset.answer;
 
+  userAnswers.push(userAnswer);
+
   if (correctAnswer === userAnswer) {
     console.log('OK');
   } else {
     console.log('ERROR');
   }
+
   if (currentQuestion === gameAnswers.length - 2) {
     console.log('LAST QUESTION');
   }

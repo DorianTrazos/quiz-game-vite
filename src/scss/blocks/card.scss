@@ -1,9 +1,14 @@
-.box {
-  position: absolute;
-  left: 50%;
-  width: 200px;
-  height: 400px;
-  background-color: cadetblue;
-  transition: transform 0.3s;
-  transform: translateX(-50%);
+.card {
+  position: relative;
+  top: 30px;
+  left: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 300px;
+  border-radius: 2rem;
+  background-color: #fff;
+  font-size: 1.25rem;
+  // rotate: 4deg;
+  box-shadow: 15px 15px 5px rgba(0, 0, 0, 0.132);
 }
