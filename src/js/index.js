@@ -2,30 +2,79 @@ import { QUESTIONS } from '../constants/questions';
 import '../scss/styles.scss';
 import {
   answersElement,
+  correctAnswersElement,
   gameContainerElement,
   optionsContainerElement,
+  outTimeAnswersElement,
   questionElement,
   rangeElement,
   rangeLabelElement,
+  resultsElement,
   startGameButton,
   themeMessageElement,
   themesElement,
   timeElement,
-  timeSelectionElement
+  timeSelectionElement,
+  wrongAnswersElement
 } from './dom';
 
-let gameAnswers = [];
+let gameQuestions = [];
 let userAnswers = [];
 let currentQuestion = 0;
 let intervalId = null;
 let selectedTime = 20;
-
 let totalAnswers = rangeElement.value;
+
+const clearGameState = () => {
+  gameQuestions = [];
+  userAnswers = [];
+  currentQuestion = 0;
+};
+
+const createAnswerObject = (userAnswer, isCorrect) => ({
+  userAnswer,
+  isCorrect
+});
+
+const showResults = () => {
+  const fragment = document.createDocumentFragment();
+
+  gameQuestions.forEach((question, index) => {
+    const userResponse = userAnswers[index];
+    const answerContainer = document.createElement('div');
+    const questionEl = document.createElement('p');
+    questionEl.textContent = question.question;
+
+    const correctAnswerEl = document.createElement('p');
+    correctAnswerEl.textContent = `Respuesta correcta: ${question.answer}`;
+
+    const userAnswerEl = document.createElement('p');
+    userAnswerEl.textContent = userResponse?.userAnswer ?? '';
+
+    answerContainer.append(questionEl, correctAnswerEl, userAnswerEl);
+
+    if (!userResponse) {
+      outTimeAnswersElement.append(answerContainer);
+    } else if (userResponse.isCorrect) {
+      correctAnswersElement.append(answerContainer);
+    } else {
+      wrongAnswersElement.append(answerContainer);
+    }
+  });
+};
+
+const showResultsContainer = () => {
+  clearInterval(intervalId);
+  gameContainerElement.classList.add('hide');
+  optionsContainerElement.classList.add('hide');
+  startGameButton.classList.add('hide');
+  resultsElement.classList.remove('hide');
+  showResults();
+};
 
 const showGameContainer = () => {
   optionsContainerElement.classList.add('hide');
-  startGameButton.classList.add('hide');
-  // homeCardElement.classList.add('hide');
+  resultsElement.classList.add('hide');
   gameContainerElement.classList.remove('hide');
 };
 
@@ -36,24 +85,38 @@ const setTimer = () => {
   intervalId = setInterval(() => {
     remainingTime--;
     timeElement.textContent = remainingTime;
+
     if (remainingTime <= 0) {
       clearInterval(intervalId);
-      currentQuestion++;
-      printQuestion();
+      handleNoAnswer();
     }
   }, 1000);
-  showGameContainer();
+};
+
+const handleNoAnswer = () => {
+  userAnswers.push(null);
+  advanceToNextQuestion();
+};
+
+const advanceToNextQuestion = () => {
+  currentQuestion++;
+  if (currentQuestion >= gameQuestions.length) {
+    showResultsContainer();
+  } else {
+    printQuestion();
+  }
 };
 
 const printQuestion = () => {
-  questionElement.textContent = gameAnswers[currentQuestion].question;
-  [...answersElement.children]
-    .sort(() => Math.random() - 0.5)
-    .forEach((answer, index) => {
-      const currentAnswer = gameAnswers[currentQuestion].options[index];
-      answer.textContent = currentAnswer;
-      answer.dataset.answer = currentAnswer;
-    });
+  const current = gameQuestions[currentQuestion];
+  questionElement.textContent = current.question;
+
+  const shuffledOptions = [...current.options].sort(() => Math.random() - 0.5);
+  [...answersElement.children].forEach((element, index) => {
+    const option = shuffledOptions[index];
+    element.textContent = option;
+    element.dataset.answer = option;
+  });
 
   setTimer();
 };
@@ -64,62 +127,53 @@ const changeRangeLabel = event => {
 };
 
 const setTimeSelected = event => {
-  if (!event) {
-    selectedTime = timeSelectionElement.querySelector('input:checked').value;
-  } else {
-    selectedTime = event.target.value;
-  }
+  selectedTime = event?.target?.value || timeSelectionElement.querySelector('input:checked').value;
 };
 
 const getGameAnswers = () => {
-  gameAnswers = [];
-  const categorySelected = themesElement.querySelectorAll('.category-input:checked');
-  const allQuestionsFromCategories = [];
-  categorySelected.forEach(input => {
-    allQuestionsFromCategories.push(...QUESTIONS[input.value]);
-  });
+  clearGameState();
 
-  while (gameAnswers.length < totalAnswers) {
-    const randomNumber = Math.floor(Math.random() * allQuestionsFromCategories.length);
+  const selectedCategories = [...themesElement.querySelectorAll('.category-input:checked')];
+  const allQuestions = selectedCategories.flatMap(input => QUESTIONS[input.value]);
 
-    if (!gameAnswers.includes(allQuestionsFromCategories[randomNumber])) {
-      gameAnswers.push(allQuestionsFromCategories[randomNumber]);
+  while (gameQuestions.length < totalAnswers) {
+    const randomIndex = Math.floor(Math.random() * allQuestions.length);
+    const question = allQuestions[randomIndex];
+
+    if (!gameQuestions.includes(question)) {
+      gameQuestions.push(question);
     }
   }
-  console.log(gameAnswers);
+
+  // Ocultar botón de jugar al iniciar el juego
+  startGameButton.classList.add('hide');
+
   printQuestion();
+  showGameContainer();
 };
 
 const setStartButtonState = () => {
-  const categorySelected = [...themesElement.querySelectorAll('.category-input:checked')];
-  const areCategoriesSelected = categorySelected.some(input => input.checked);
-  if (areCategoriesSelected) {
-    themeMessageElement.textContent = '';
-  } else {
-    themeMessageElement.textContent = 'Selecciona al menos un tema';
-  }
-  startGameButton.disabled = !areCategoriesSelected;
+  const categoriesChecked = [...themesElement.querySelectorAll('.category-input:checked')];
+  const isValid = categoriesChecked.length > 0;
+
+  themeMessageElement.textContent = isValid ? '' : 'Selecciona al menos un tema';
+  startGameButton.disabled = !isValid;
 };
 
 const checkCorrectAnswer = event => {
-  const correctAnswer = gameAnswers[currentQuestion].answer;
+  if (!event.target.dataset.answer) return;
+
+  clearInterval(intervalId);
+
   const userAnswer = event.target.dataset.answer;
+  const correctAnswer = gameQuestions[currentQuestion].answer;
+  const isCorrect = userAnswer === correctAnswer;
 
-  userAnswers.push(userAnswer);
-
-  if (correctAnswer === userAnswer) {
-    console.log('OK');
-  } else {
-    console.log('ERROR');
-  }
-
-  if (currentQuestion === gameAnswers.length - 1) {
-    console.log('LAST QUESTION');
-  }
-  currentQuestion++;
-  printQuestion();
+  userAnswers.push(createAnswerObject(userAnswer, isCorrect));
+  advanceToNextQuestion();
 };
 
+// EVENT LISTENERS
 rangeElement.addEventListener('input', changeRangeLabel);
 startGameButton.addEventListener('click', getGameAnswers);
 themesElement.addEventListener('change', setStartButtonState);

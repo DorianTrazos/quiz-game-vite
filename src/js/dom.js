@@ -25,6 +25,7 @@ export {
   questionElement,
   rangeElement,
   rangeLabelElement,
+  resultsElement,
   startGameButton,
   themeMessageElement,
   themesElement,

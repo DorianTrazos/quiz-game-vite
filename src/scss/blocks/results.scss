@@ -1,3 +1,10 @@
 .results-container {
+  position: relative;
+  width: 80%;
+  top: 100px;
+  left: 50%;
+  translate: -50%;
   color: white;
+  background-color: var(--general);
+  text-align: center;
 }
