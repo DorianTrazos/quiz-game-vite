@@ -10,14 +10,15 @@ import {
   startGameButton,
   themeMessageElement,
   themesElement,
-  timeElement
+  timeElement,
+  timeSelectionElement
 } from './dom';
 
 let gameAnswers = [];
 let userAnswers = [];
 let currentQuestion = 0;
 let intervalId = null;
-const selectedTime = 60;
+let selectedTime = 20;
 
 let totalAnswers = rangeElement.value;
 
@@ -62,6 +63,14 @@ const changeRangeLabel = event => {
   rangeLabelElement.textContent = totalAnswers;
 };
 
+const setTimeSelected = event => {
+  if (!event) {
+    selectedTime = timeSelectionElement.querySelector('input:checked').value;
+  } else {
+    selectedTime = event.target.value;
+  }
+};
+
 const getGameAnswers = () => {
   gameAnswers = [];
   const categorySelected = themesElement.querySelectorAll('.category-input:checked');
@@ -104,7 +113,7 @@ const checkCorrectAnswer = event => {
     console.log('ERROR');
   }
 
-  if (currentQuestion === gameAnswers.length - 2) {
+  if (currentQuestion === gameAnswers.length - 1) {
     console.log('LAST QUESTION');
   }
   currentQuestion++;
@@ -114,4 +123,5 @@ const checkCorrectAnswer = event => {
 rangeElement.addEventListener('input', changeRangeLabel);
 startGameButton.addEventListener('click', getGameAnswers);
 themesElement.addEventListener('change', setStartButtonState);
+timeSelectionElement.addEventListener('change', setTimeSelected);
 answersElement.addEventListener('click', checkCorrectAnswer);

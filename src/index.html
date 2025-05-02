@@ -40,33 +40,32 @@
               <label class="radio-label" for="60s">60</label>
             </div>
           </div>
-          <div></div>
-          <p>Temas</p>
-          <div id="themes" class="themes-selection">
-            <div>
-              <input type="checkbox" id="science" class="category-input" value="science" />
-              <label for="science" class="category-label" style="--bg-color: var(--science)">Ciencia</label>
-            </div>
-            <div>
-              <input type="checkbox" id="geography" class="category-input" value="geography" />
-              <label for="geography" class="category-label" style="--bg-color: var(--geography)">Geografía</label>
-            </div>
-            <div>
-              <input type="checkbox" id="art" class="category-input" value="art" />
-              <label for="art" class="category-label" style="--bg-color: var(--art)">Arte</label>
-            </div>
-            <div>
-              <input type="checkbox" id="history" class="category-input" value="history" />
-              <label for="history" class="category-label" style="--bg-color: var(--history)">Historia</label>
-            </div>
-            <div>
-              <input type="checkbox" id="mythology" class="category-input" value="mythology" />
-              <label for="mythology" class="category-label" style="--bg-color: var(--mythology)">Mitología</label>
-            </div>
-            <div>
-              <input type="checkbox" id="general" class="category-input" value="general" />
-              <label for="general" class="category-label" style="--bg-color: var(--general)">Cultura General</label>
-            </div>
+        </div>
+        <p>Temas</p>
+        <div id="themes" class="themes-selection">
+          <div>
+            <input type="checkbox" id="science" class="category-input" value="science" />
+            <label for="science" class="category-label" style="--bg-color: var(--science)">Ciencia</label>
+          </div>
+          <div>
+            <input type="checkbox" id="geography" class="category-input" value="geography" />
+            <label for="geography" class="category-label" style="--bg-color: var(--geography)">Geografía</label>
+          </div>
+          <div>
+            <input type="checkbox" id="art" class="category-input" value="art" />
+            <label for="art" class="category-label" style="--bg-color: var(--art)">Arte</label>
+          </div>
+          <div>
+            <input type="checkbox" id="history" class="category-input" value="history" />
+            <label for="history" class="category-label" style="--bg-color: var(--history)">Historia</label>
+          </div>
+          <div>
+            <input type="checkbox" id="mythology" class="category-input" value="mythology" />
+            <label for="mythology" class="category-label" style="--bg-color: var(--mythology)">Mitología</label>
+          </div>
+          <div>
+            <input type="checkbox" id="general" class="category-input" value="general" />
+            <label for="general" class="category-label" style="--bg-color: var(--general)">Cultura General</label>
           </div>
         </div>
         <p id="theme-message">Selecciona al menos un tema</p>
@@ -82,6 +81,14 @@
           <p>Respuesta 4</p>
         </div>
         <span id="time" class="time"></span>
+      </div>
+      <div id="results" class="results-container">
+        <h2>Acertadas</h2>
+        <div id="correct-answers"></div>
+        <h2>Falladas</h2>
+        <div id="wrong-answers"></div>
+        <h2>No Contestadas</h2>
+        <div id="out-time-answers"></div>
       </div>
     </main>
     <script type="module" src="./js/index.js"></script>
